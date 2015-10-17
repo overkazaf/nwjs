@@ -1,0 +1,7 @@
+{
+  "main" : "demo.html",
+  "name" : "first demo",
+  "window" : {
+    "toolbar" : true
+  }
+}
