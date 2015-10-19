@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>John's Workspace</title>
     <style type="text/css">
 		.mt10 {
 			margin-top:20px;
@@ -63,8 +63,19 @@
         		</div>
         		<hr>
         		<div class="row">
-        			<div class="container" data-belong="income" data-type="item-container">
-				    	
+        			<div class="container" data-belong="apps" data-type="item-container">
+				    	<div class="row">
+				    		<div class="col-xs-3">
+				    			<a href="#" class="thumbnail">
+							      <img src="..." alt="...">
+							    </a>
+				    		</div>
+				    		<div class="col-xs-3">
+				    			<a href="#" class="thumbnail">
+							      <img src="..." alt="...">
+							    </a>
+				    		</div>
+				    	</div>
 				    </div>
 
         			<div class="container" data-belong="income" data-type="item-container">
@@ -127,7 +138,7 @@
 					</ul> -->
         		</div>
 
-        		<div class="row">
+        		<!-- <div class="row">
         			<ul class="pagination">
 					    <li>
 					      <a href="#" aria-label="Previous">
@@ -145,7 +156,7 @@
 					      </a>
 					    </li>
 					  </ul>
-        		</div>
+        		</div> -->
         	</div>
         </div>
        </div>
@@ -168,6 +179,10 @@ function initModules () {
 		$listItems.removeClass('active');
 		$(this).addClass('active');
 
+		if (requestHooks($(this))) {
+			makeRequest($(this));
+		}
+
 		if ($(this).attr('data-target')) {
 			var $targetContainer = $('.container[data-belong="'+ $(this).attr('data-target') +'"]');
 			$aContainers.hide();
@@ -176,6 +191,17 @@ function initModules () {
 
 	});
 }
+
+
+function requestHooks ($el) {
+	return false;
+}
+
+function makeRequest ($el) {
+	return void 0;
+}
+
+
 </script>
 
 </html>
