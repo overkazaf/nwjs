@@ -24,35 +24,35 @@
     <div class="container mt10">
        <div class="row">
        	 <div class="col-xs-12">
-        	<div class="col-xs-4">
+        	<div class="col-xs-3">
         		<div class="list-group">
-				  <a href="#" class="list-group-item active">
-				    Cras justo odio <span class="badge">4</span>
+				  <a href="#" class="list-group-item">
+				    备忘 <span class="badge">4</span>
 				  </a>
 				  <a href="#" class="list-group-item">
-				  	Dapibus ac facilisis in <span class="badge">4</span>
+				  	草稿 <span class="badge">4</span>
 				  </a>
 				  <a href="#" class="list-group-item">
-				  	Morbi leo risus <span class="badge">4</span>
+				  	电台 <span class="badge">4</span>
+				  </a>
+				  <a href="#" class="list-group-item" data-target="apps">
+				    应用 <span class="badge">4</span>
 				  </a>
 				  <a href="#" class="list-group-item">
-				  Porta ac consectetur <span class="badge">4</span>
-				  </a>
-				  <a href="#" class="list-group-item">
-				  Vestibulum at eros <span class="badge">4</span>
+				  	邮件 <span class="badge">4</span>
 				  </a>
 				</div>
 				<hr>
 				<div class="list-group">
-				  <a href="#" class="list-group-item active">
-				    Cras justo odio <span class="badge">4</span>
-				  </a>
 				  <a href="#" class="list-group-item">
-				  	Dapibus ac facilisis in <span class="badge">4</span>
+				    支出 <span class="badge">4</span>
+				  </a>
+				  <a href="#" data-target="income" class="list-group-item">
+				  	收入 <span class="badge">4</span>
 				  </a>
 				</div>
         	</div>
-        	<div class="col-xs-6 col-xs-offset-1">
+        	<div class="col-xs-9">
         		<div class="row">
         			<div class="input-group">
 				      <input type="text" class="form-control" placeholder="Search for...">
@@ -63,12 +63,68 @@
         		</div>
         		<hr>
         		<div class="row">
-        			<ul class="list-group">
+        			<div class="container" data-belong="income" data-type="item-container">
+				    	
+				    </div>
+
+        			<div class="container" data-belong="income" data-type="item-container">
+				    	<table class="table table-striped table-condensed txt-center">
+				    		<thead>
+				    			<th>序号</th>
+				    			<th>详细</th>
+				    			<th>金额（RMB）</th>
+				    			<th>日期</th>
+				    			<th>操作</th>
+				    		</thead>
+				    		<tbody>
+				    			<tr>
+				    				<td>1</td>
+				    				<td>
+				    					<a href="#" class="btn btn-link">
+				    						打卡的工资收入
+				    					</a>
+				    				</td>
+				    				<td>
+				    					3815.00
+				    				</td>
+				    				<td>
+				    					2015/10/19
+				    				</td>
+				    				<td>
+				    					<button class="btn btn-xs btn-default">
+				    						标记
+				    					</button>
+				    				</td>
+				    			</tr>
+				    			<tr>
+				    				<td>1</td>
+				    				<td>
+				    					<a href="#" class="btn btn-link">
+				    						打卡的工资收入
+				    					</a>
+				    				</td>
+				    				<td>
+				    					3815.00
+				    				</td>
+				    				<td>
+				    					2015/10/19
+				    				</td>
+				    				<td>
+				    					<button class="btn btn-xs btn-default">
+				    						标记
+				    					</button>
+				    				</td>
+				    			</tr>
+				    		</tbody>
+				    	</table>
+				    </div>
+        			
+        			<!-- <ul class="list-group">
 					  <li class="list-group-item list-group-item-success">Dapibus ac facilisis in</li>
 					  <li class="list-group-item list-group-item-info">Cras sit amet nibh libero</li>
 					  <li class="list-group-item list-group-item-warning">Porta ac consectetur ac</li>
 					  <li class="list-group-item list-group-item-danger">Vestibulum at eros</li>
-					</ul>
+					</ul> -->
         		</div>
 
         		<div class="row">
@@ -94,13 +150,32 @@
         </div>
        </div>
     </div>
-    <div class="container">
-    </div>
+
 </body>
 <script type="text/javascript">
 $(function() {
-
+	initModules();
 });
+
+
+function initModules () {
+	var $listItems = $('.list-group-item'),
+		$aContainers = $('.container[data-type="item-container"]');
+
+	$aContainers.hide();
+
+	$listItems.on('click', function (){
+		$listItems.removeClass('active');
+		$(this).addClass('active');
+
+		if ($(this).attr('data-target')) {
+			var $targetContainer = $('.container[data-belong="'+ $(this).attr('data-target') +'"]');
+			$aContainers.hide();
+			$targetContainer.fadeIn();
+		}
+
+	});
+}
 </script>
 
 </html>
