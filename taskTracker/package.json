@@ -1,0 +1,7 @@
+{
+  "main" : "demo.html",
+  "name" : "John's Task Tracker",
+  "window" : {
+    "toolbar" : true
+  }
+}
