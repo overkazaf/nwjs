@@ -1,0 +1,12 @@
+{
+	"apps" : [
+	{
+		"name" : "Email",
+		"icon" : "images/email.png"
+ 	},
+	{
+		"name" : "Radio",
+		"icon" : "images/radio.png"
+	}
+	]
+}
