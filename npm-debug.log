@@ -1,158 +1,87 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'nw' ]
+1 verbose cli [ 'node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '--save-dev',
+1 verbose cli   'fontawesome' ]
 2 info using npm@2.11.3
 3 info using node@v0.12.7
-4 verbose install initial load of /usr/local/lib/package.json
-5 verbose readDependencies loading dependencies from /usr/local/lib/package.json
-6 silly cache add args [ 'nw', null ]
-7 verbose cache add spec nw
-8 silly cache add parsed spec { raw: 'nw',
-8 silly cache add   scope: null,
-8 silly cache add   name: 'nw',
-8 silly cache add   rawSpec: '',
-8 silly cache add   spec: '*',
-8 silly cache add   type: 'range' }
-9 silly addNamed nw@*
-10 verbose addNamed "*" is a valid semver range for nw
-11 silly addNameRange { name: 'nw', range: '*', hasData: false }
-12 silly mapToRegistry name nw
-13 silly mapToRegistry using default registry
-14 silly mapToRegistry registry https://registry.npmjs.org/
-15 silly mapToRegistry uri https://registry.npmjs.org/nw
-16 verbose addNameRange registry:https://registry.npmjs.org/nw not in flight; fetching
-17 verbose request uri https://registry.npmjs.org/nw
-18 verbose request no auth needed
-19 info attempt registry request try #1 at 11:51:39
-20 verbose request id d3dfaa3e23959f26
-21 verbose etag "A6R8CPDL6GGY0LBUQT454KDWZ"
-22 http request GET https://registry.npmjs.org/nw
-23 http 304 https://registry.npmjs.org/nw
-24 silly get cb [ 304,
-24 silly get   { date: 'Sat, 17 Oct 2015 03:51:39 GMT',
-24 silly get     via: '1.1 varnish',
-24 silly get     'cache-control': 'max-age=60',
-24 silly get     etag: '"A6R8CPDL6GGY0LBUQT454KDWZ"',
-24 silly get     age: '10',
-24 silly get     connection: 'keep-alive',
-24 silly get     'x-served-by': 'cache-sjc3135-SJC',
-24 silly get     'x-cache': 'HIT',
-24 silly get     'x-cache-hits': '1',
-24 silly get     'x-timer': 'S1445053899.172408,VS0,VE0',
-24 silly get     vary: 'Accept' } ]
-25 verbose etag https://registry.npmjs.org/nw from cache
-26 verbose get saving nw to /Users/overkazaf/.npm/registry.npmjs.org/nw/.cache.json
-27 silly addNameRange number 2 { name: 'nw', range: '*', hasData: true }
-28 silly addNameRange versions [ 'nw',
-28 silly addNameRange   [ '0.12.0-alpha1',
-28 silly addNameRange     '0.12.0-alpha2',
-28 silly addNameRange     '0.12.0-alpha3',
-28 silly addNameRange     '0.12.0-rc1',
-28 silly addNameRange     '0.12.0',
-28 silly addNameRange     '0.12.0-1',
-28 silly addNameRange     '0.12.1',
-28 silly addNameRange     '0.12.2',
-28 silly addNameRange     '0.12.3' ] ]
-29 silly addNamed nw@0.12.3
-30 verbose addNamed "0.12.3" is a plain semver version for nw
-31 silly cache afterAdd nw@0.12.3
-32 verbose afterAdd /Users/overkazaf/.npm/nw/0.12.3/package/package.json not in flight; writing
-33 verbose afterAdd /Users/overkazaf/.npm/nw/0.12.3/package/package.json written
-34 silly install resolved [ { name: 'nw',
-34 silly install resolved     version: '0.12.3',
-34 silly install resolved     description: 'A installer for nw.js',
-34 silly install resolved     repository: { type: 'git', url: 'git://github.com/nwjs/npm-installer.git' },
-34 silly install resolved     main: 'index.js',
-34 silly install resolved     bin: { nw: 'bin/nw' },
-34 silly install resolved     scripts:
-34 silly install resolved      { postinstall: 'node scripts/install.js',
-34 silly install resolved        test: 'node test/index.js' },
-34 silly install resolved     files: [ 'lib', 'bin', 'scripts', 'index.js' ],
-34 silly install resolved     author: { name: 'Kyle Robinson Young' },
-34 silly install resolved     license: 'MIT',
-34 silly install resolved     dependencies:
-34 silly install resolved      { decompress: '^2.2.1',
-34 silly install resolved        download: '^3.3.0',
-34 silly install resolved        'file-exists': '^0.1.1',
-34 silly install resolved        merge: '^1.2.0',
-34 silly install resolved        multimeter: '^0.1.1',
-34 silly install resolved        rimraf: '^2.2.8',
-34 silly install resolved        semver: '^4.3.0',
-34 silly install resolved        yargs: '^3.2.1',
-34 silly install resolved        chalk: '~1.0.0' },
-34 silly install resolved     devDependencies: { request: '^2.53.0', tape: '^3.5.0' },
-34 silly install resolved     keywords:
-34 silly install resolved      [ 'nw',
-34 silly install resolved        'nw.js',
-34 silly install resolved        'nwjs',
-34 silly install resolved        'chromium',
-34 silly install resolved        'io.js',
-34 silly install resolved        'node-webkit',
-34 silly install resolved        'webkit',
-34 silly install resolved        'installer',
-34 silly install resolved        'desktop',
-34 silly install resolved        'application' ],
-34 silly install resolved     gitHead: '064944f4734b6d629fffc55ad9a5bbca512eeae7',
-34 silly install resolved     bugs: { url: 'https://github.com/nwjs/npm-installer/issues' },
-34 silly install resolved     homepage: 'https://github.com/nwjs/npm-installer#readme',
-34 silly install resolved     _id: 'nw@0.12.3',
-34 silly install resolved     _shasum: 'a06f348bfec0b43484492627605b18eed618703e',
-34 silly install resolved     _from: 'nw@*',
-34 silly install resolved     _npmVersion: '2.12.1',
-34 silly install resolved     _nodeVersion: '2.3.4',
-34 silly install resolved     _npmUser: { name: 'shama', email: 'kyle@dontkry.com' },
-34 silly install resolved     maintainers: [ [Object], [Object] ],
-34 silly install resolved     dist:
-34 silly install resolved      { shasum: 'a06f348bfec0b43484492627605b18eed618703e',
-34 silly install resolved        tarball: 'http://registry.npmjs.org/nw/-/nw-0.12.3.tgz' },
-34 silly install resolved     directories: {},
-34 silly install resolved     _resolved: 'https://registry.npmjs.org/nw/-/nw-0.12.3.tgz',
-34 silly install resolved     readme: 'ERROR: No README data found!' } ]
-35 info install nw@0.12.3 into /usr/local/lib
-36 info installOne nw@0.12.3
-37 verbose installOne of nw to /usr/local/lib not in flight; installing
-38 verbose lock using /Users/overkazaf/.npm/_locks/nw-3d3025e27bc7c533.lock for /usr/local/lib/node_modules/nw
-39 silly install write writing nw 0.12.3 to /usr/local/lib/node_modules/nw
-40 verbose unbuild lib/node_modules/nw
-41 silly gentlyRm /usr/local/lib/node_modules/nw is being purged from base /usr/local
-42 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/nw
-43 verbose tar unpack /Users/overkazaf/.npm/nw/0.12.3/package.tgz
-44 verbose tar unpacking to /usr/local/lib/node_modules/nw
-45 silly gentlyRm /usr/local/lib/node_modules/nw is being purged
-46 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/nw
-47 silly gunzTarPerm modes [ '755', '644' ]
-48 error tar.unpack untar error /Users/overkazaf/.npm/nw/0.12.3/package.tgz
-49 verbose unlock done using /Users/overkazaf/.npm/_locks/nw-3d3025e27bc7c533.lock for /usr/local/lib/node_modules/nw
-50 verbose fstream_path /usr/local/lib/node_modules/nw
-51 verbose fstream_type Directory
-52 verbose fstream_class DirWriter
-53 verbose stack Error: EACCES, mkdir '/usr/local/lib/node_modules/nw'
-53 verbose stack     at Error (native)
-54 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:35:25
-54 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:47:53
-54 verbose fstream_stack FSReqWrap.oncomplete (fs.js:95:15)
-55 verbose cwd /Users/overkazaf/Desktop/codes/git/nwProjects
-56 error Darwin 15.0.0
-57 error argv "node" "/usr/local/bin/npm" "install" "-g" "nw"
-58 error node v0.12.7
-59 error npm  v2.11.3
-60 error path /usr/local/lib/node_modules/nw
-61 error code EACCES
-62 error errno -13
-63 error Error: EACCES, mkdir '/usr/local/lib/node_modules/nw'
-63 error     at Error (native)
-63 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/nw']
-63 error   errno: -13,
-63 error   code: 'EACCES',
-63 error   path: '/usr/local/lib/node_modules/nw',
-63 error   fstream_type: 'Directory',
-63 error   fstream_path: '/usr/local/lib/node_modules/nw',
-63 error   fstream_class: 'DirWriter',
-63 error   fstream_stack:
-63 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:35:25',
-63 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:47:53',
-63 error      'FSReqWrap.oncomplete (fs.js:95:15)' ] }
-64 error Please try running this command again as root/Administrator.
-65 verbose exit [ -13, true ]
-66 verbose unbuild lib/node_modules/nw
-67 silly gentlyRm /usr/local/lib/node_modules/nw is being purged from base /usr/local
-68 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/nw
+4 verbose install initial load of /Users/overkazaf/Desktop/codes/git/nwProjects/package.json
+5 verbose installManyTop reading scoped package data from /Users/overkazaf/Desktop/codes/git/nwProjects/node_modules/bootstrap/package.json
+6 verbose installManyTop reading scoped package data from /Users/overkazaf/Desktop/codes/git/nwProjects/node_modules/jquery/package.json
+7 info package.json jquery@2.1.4 No license field.
+8 verbose readDependencies loading dependencies from /Users/overkazaf/Desktop/codes/git/nwProjects/package.json
+9 silly cache add args [ 'fontawesome', null ]
+10 verbose cache add spec fontawesome
+11 silly cache add parsed spec { raw: 'fontawesome',
+11 silly cache add   scope: null,
+11 silly cache add   name: 'fontawesome',
+11 silly cache add   rawSpec: '',
+11 silly cache add   spec: '*',
+11 silly cache add   type: 'range' }
+12 silly addNamed fontawesome@*
+13 verbose addNamed "*" is a valid semver range for fontawesome
+14 silly addNameRange { name: 'fontawesome', range: '*', hasData: false }
+15 silly mapToRegistry name fontawesome
+16 silly mapToRegistry using default registry
+17 silly mapToRegistry registry https://registry.npmjs.org/
+18 silly mapToRegistry uri https://registry.npmjs.org/fontawesome
+19 verbose addNameRange registry:https://registry.npmjs.org/fontawesome not in flight; fetching
+20 verbose request uri https://registry.npmjs.org/fontawesome
+21 verbose request no auth needed
+22 info attempt registry request try #1 at 21:41:46
+23 verbose request id a42b05f43f343d66
+24 http request GET https://registry.npmjs.org/fontawesome
+25 http 404 https://registry.npmjs.org/fontawesome
+26 verbose headers { 'content-type': 'application/json',
+26 verbose headers   'cache-control': 'max-age=0',
+26 verbose headers   'content-length': '2',
+26 verbose headers   'accept-ranges': 'bytes',
+26 verbose headers   date: 'Mon, 26 Oct 2015 13:41:48 GMT',
+26 verbose headers   via: '1.1 varnish',
+26 verbose headers   age: '0',
+26 verbose headers   connection: 'keep-alive',
+26 verbose headers   'x-served-by': 'cache-lax1428-LAX',
+26 verbose headers   'x-cache': 'MISS',
+26 verbose headers   'x-cache-hits': '0',
+26 verbose headers   'x-timer': 'S1445866908.635164,VS0,VE332' }
+27 silly get cb [ 404,
+27 silly get   { 'content-type': 'application/json',
+27 silly get     'cache-control': 'max-age=0',
+27 silly get     'content-length': '2',
+27 silly get     'accept-ranges': 'bytes',
+27 silly get     date: 'Mon, 26 Oct 2015 13:41:48 GMT',
+27 silly get     via: '1.1 varnish',
+27 silly get     age: '0',
+27 silly get     connection: 'keep-alive',
+27 silly get     'x-served-by': 'cache-lax1428-LAX',
+27 silly get     'x-cache': 'MISS',
+27 silly get     'x-cache-hits': '0',
+27 silly get     'x-timer': 'S1445866908.635164,VS0,VE332' } ]
+28 verbose stack Error: Registry returned 404 for GET on https://registry.npmjs.org/fontawesome
+28 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:239:14)
+28 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:170:14)
+28 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:354:22)
+28 verbose stack     at Request.emit (events.js:110:17)
+28 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1207:14)
+28 verbose stack     at Request.emit (events.js:129:20)
+28 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1153:12)
+28 verbose stack     at IncomingMessage.emit (events.js:129:20)
+28 verbose stack     at _stream_readable.js:908:16
+28 verbose stack     at process._tickCallback (node.js:355:11)
+29 verbose statusCode 404
+30 verbose pkgid fontawesome
+31 verbose cwd /Users/overkazaf/Desktop/codes/git/nwProjects
+32 error Darwin 15.0.0
+33 error argv "node" "/usr/local/bin/npm" "install" "--save-dev" "fontawesome"
+34 error node v0.12.7
+35 error npm  v2.11.3
+36 error code E404
+37 error 404 Registry returned 404 for GET on https://registry.npmjs.org/fontawesome
+37 error 404
+37 error 404 'fontawesome' is not in the npm registry.
+37 error 404 You should bug the author to publish it (or use the name yourself!)
+37 error 404
+37 error 404 Note that you can also install from a
+37 error 404 tarball, folder, http url, or git url.
+38 verbose exit [ 1, true ]
