@@ -40,8 +40,12 @@
  */
 
 var
-	multiSiteIds = {},
+	multiSiteIds = [],
 	multiSiteColumns = {},
+	defaultData = {
+		'sites' : [],
+		'siteColumns' : {}
+	},
 	ftlCache = {}, // 数据缓存，用于生成FreeMarker标签时取值
 	ftlDict = {
 		'getSite': 'site',
@@ -93,7 +97,9 @@ var
 		'cont-tpl1',
 		'cont-tpl2',
 		'cont-tpl3',
-		'nav-auto' // 自动生成的导航栏， 目前可选几个样式
+		'nav-auto-type1', // 自动生成的导航栏， 导航部分为水平条状
+		'nav-auto-type2', // 自动生成的导航栏， 导航部分为方块状
+		'nav-auto' // 自动生成的导航栏， 目前可选几个样式，这个是默认样式
 	],
 	// 定义不同类型的部件数组，以区分其渲染策略
 	homeWidgetTypes = [], // 这个类型的部件，站点简称和栏目简称需要手动配置
@@ -136,11 +142,13 @@ var
 		},
 		fetchType: function(dom) {
 			var fetched;
-			$.each(ftlTypes, function(i, className) {
+			for (var i = 0, l = ftlTypes.length; i < l; i++) {
+				var className = ftlTypes[i];
 				if (dom.hasClass(className)) {
 					fetched = className;
+					break;
 				}
-			});
+			}
 			return fetched;
 		},
 		/**
@@ -3611,13 +3619,15 @@ var createWidgetPanel = {
 			widget = data['widget'];
 		};
 
+		multiSiteIds = [];
+		multiSiteColumns = {};
 
 		var sites = defaultData['sites'];
 		var siteColumns = defaultData['siteColumns'];
 		var counter = 0;
 
 		html += '<h6>选择站点</h6>';
-		html += '<select name="siteArray" class="multiselect">';
+		html += '<select name="siteArray" class="selectSite">';
 		$.each(sites, function (i, site){
 			html += '<option value="'+ site['siteId'] +'" data-siteid="'+ site['siteId'] +'">';
 			html += site['siteName'];
@@ -3627,54 +3637,7 @@ var createWidgetPanel = {
 		html += '</select>';
 
 
-		
-		$.each(sites, function (i, site){
-			$.ajax({
-				url : ctxUrl + '/siteColumnController/getSiteColumn.do?&t=' + Math.random(),
-				type : 'POST',
-				dataType : 'json',
-				data : {
-					siteId : site['siteId']
-				},
-				cache : false,
-				success : function (data){
-					if (!defaultData['siteColumns']) {
-						defaultData['siteColumns'] = {};
-					}
-
-					defaultData['siteColumns'][site['siteId']] = data;
-					
-					if (--counter === 0) {
-						siteColumns = defaultData['siteColumns'];
-						
-						var timeoutFn = function (){
-							html += '<h6>选择栏目</h6>';
-
-							html += '<select class="multiselect" name="siteColumnArray" multiple="multiple">';
-							$.each(sites, function (i, site) {
-								html += '<optgroup data-siteid="'+ site['siteId'] +'" label="'+ site['siteName'] +'">'
-								
-								var siteColumnArray = siteColumns[site['siteId']];
-								$.each(siteColumnArray, function (j, column){
-									html += '<option value="'+ column['columnId'] +'" data-columnid="' + column['columnId'] +'" disabled>'+ column['columnName'] +'</option>';
-								});
-
-								html += '</optgroup>';
-							});
-
-							html += '</select>';
-							callback && $.isFunction(callback) && callback(html);
-						};
-
-						timeoutFn();
-					}
-				},
-				error : function (){
-
-				}
-			});
-
-		});
+		callback && $.isFunction(callback) && callback(html);
 	},
 	'weather': function(elemId, self, targetIndex, callback) {
 		callback && $.isFunction(callback) && callback('');
@@ -4944,99 +4907,205 @@ var createReadyFN = function(type, elemId, self, targetIndex, callback) {
 					}).trigger('click');
 				});
 			}
-			
-			$('.multiselect[name="siteArray"]').multiSelect({
-				keepOrder : true,
-				selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='输入关键字查找'>",
-				selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='输入关键字查找'>",
-				afterInit: function(ms){
-					var that = this,
-					    $selectableSearch = that.$selectableUl.prev(),
-					    $selectionSearch = that.$selectionUl.prev(),
-					    selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-					    selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
 
-					that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-					.on('keydown', function(e){
-					  if (e.which === 40){
-					    that.$selectableUl.focus();
-					    return false;
-					  }
-					});
+			// var loopFn;
+			// $.each(sites, function (i, site){
+			// 	if (!loopFn) {
+			// 		loopFn = function (){
+			// 			if (--counter === 0) {
+			// 				siteColumns = defaultData['siteColumns'];
+			// 				var timeoutFn = function (){
+			// 					html += '<h6>选择栏目</h6>';
 
-					that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-					.on('keydown', function(e){
-					  if (e.which == 40){
-					    that.$selectionUl.focus();
-					    return false;
-					  }
-					});
-				},
-				afterSelect : function (value){
-					var $select = $('.multiselect[name="siteColumnArray"]');
-						$select.find('optgroup[data-siteid="'+ value +'"]')
-							   .find('option').removeAttr('disabled');
-					
-						this.qs1.cache();
-	    				this.qs2.cache();
-						$select.multiSelect('refresh');
+			// 					html += '<select class="multiselect" name="siteColumnArray" multiple="multiple">';
+			// 					$.each(sites, function (i, site) {
+			// 						html += '<optgroup data-siteid="'+ site['siteId'] +'" label="'+ site['siteName'] +'">'
+									
+			// 						var siteColumnArray = siteColumns[site['siteId']];
+			// 						$.each(siteColumnArray, function (j, column){
+			// 							html += '<option value="'+ column['columnId'] +'" data-columnid="' + column['columnId'] +'" disabled>'+ column['columnName'] +'</option>';
+			// 						});
 
-						// fix global vars
-						if (!multiSiteIds)multiSiteIds = {};
-						multiSiteIds[value] = true;
-				},
-				afterDeselect : function (value){
-					var $select = $('.multiselect[name="siteColumnArray"]');
-					var v = [];
-						$select.find('optgroup[data-siteid="'+ value +'"]')
-							   .find('option').each(function (){
-									var vv = $(this).val();
-									$(this).attr('disabled', 'disabled');
-									v.push(vv);
-								});
+			// 						html += '</optgroup>';
+			// 					});
+
+			// 					html += '</select>';
+			// 					callback && $.isFunction(callback) && callback(html);
+			// 				};
+
+			// 				timeoutFn();
+			// 			}
+			// 		};
+			// 	}
+			// 	if (typeof defaultData['siteColumns']['siteId'] !== 'undefined') {
+			// 		loopFn();
+			// 	} else {
+			// 		setTimeout(function (){
+			// 			$.ajax({
+			// 				url : ctxUrl + '/siteColumnController/getSiteColumn.do?&t=' + Math.random(),
+			// 				type : 'POST',
+			// 				dataType : 'json',
+			// 				data : {
+			// 					siteId : site['siteId']
+			// 				},
+			// 				cache : false,
+			// 				async : false,
+			// 				success : function (data){
+			// 					if (!defaultData['siteColumns']) {
+			// 						defaultData['siteColumns'] = {};
+			// 					}
+			// 					defaultData['siteColumns'][site['siteId']] = data;
 								
-						this.qs1.cache();
-    					this.qs2.cache();
-						$select.multiSelect('refresh');
+			// 				},
+			// 				error : function (){
 
-						if(value)
-							multiSiteIds[value] = false;
+			// 				}
+			// 			}).done(function (){
+			// 				loopFn();
+			// 			});
+			// 		}, (sites.length - counter)*200 + 500);
+			// 	}
+
+			// });
+			
+			$('.selectSite').on('click', 'option', function (){
+				var siteid = $(this).val();
+				if (typeof siteColumns[siteid] !== 'undefined') {
+					// hit in cache
+					getSubColumns(siteColumns[siteid], function(json){
+						// build
+
+						var order = 0;
+						$('.multiselect[name="siteArray"]').multiSelect({
+							keepOrder : true,
+							selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='输入关键字查找'>",
+							selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='输入关键字查找'>",
+							afterInit: function(ms){
+								var that = this,
+								    $selectableSearch = that.$selectableUl.prev(),
+								    $selectionSearch = that.$selectionUl.prev(),
+								    selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+								    selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+								that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+								.on('keydown', function(e){
+								  if (e.which === 40){
+								    that.$selectableUl.focus();
+								    return false;
+								  }
+								});
+
+								that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+								.on('keydown', function(e){
+								  if (e.which == 40){
+								    that.$selectionUl.focus();
+								    return false;
+								  }
+								});
+							},
+							afterSelect : function (value){
+								var $select = $('.multiselect[name="siteColumnArray"]');
+									$select.find('optgroup[data-siteid="'+ value +'"]')
+										   .find('option').removeAttr('disabled');
+								
+									this.qs1.cache();
+				    				this.qs2.cache();
+									$select.multiSelect('refresh');
+
+									// fix global vars
+									if (!multiSiteIds)multiSiteIds = [];
+									var obj = {
+										id : value[0],
+										order : ++order
+									};
+									multiSiteIds.push(obj);
+									
+							},
+							afterDeselect : function (value){
+								var $select = $('.multiselect[name="siteColumnArray"]');
+								var v = [];
+									$select.find('optgroup[data-siteid="'+ value +'"]')
+										   .find('option').each(function (){
+												var vv = $(this).val();
+												$(this).attr('disabled', 'disabled');
+												v.push(vv);
+											});
+											
+									this.qs1.cache();
+			    					this.qs2.cache();
+									$select.multiSelect('refresh');
+
+									if(value){
+										for (var j = multiSiteIds.length-1; j>=0; j--) {
+											var obj = multiSiteIds[j];
+											if (obj['id'] == value) {
+												multiSiteIds.splice(j, 1);
+												break;
+											}
+										}
+									}
+							}
+						});
+
+						$('.multiselect[name="siteColumnArray"]').multiSelect({
+							keepOrder : true,
+							selectableOptgroup : true,
+							afterSelect : function (value){
+								var $select = $('.multiselect[name="siteColumnArray"]');
+								var $optgroup = $select.find('option[value="'+ value +'"]').closest('optgroup');
+								var siteid = $optgroup.attr('data-siteid');
+
+
+			    				if (!multiSiteColumns[siteid]) multiSiteColumns[siteid] = [];
+			    				
+			    				multiSiteColumns[siteid].push(value[0]);
+							},
+							afterDeselect : function (value){
+								var $select = $('.multiselect[name="siteColumnArray"]');
+								var $optgroup = $select.find('option[value="'+ value +'"]').closest('optgroup');
+								var siteid = $optgroup.attr('data-siteid');
+								var columns = multiSiteColumns[siteid];
+
+
+			 				    if (columns) {
+			 				    	for (var j = columns.length - 1; j >= 0; j-- ) {
+				 				    	if (columns[j] == value) {
+				 				    		columns.splice(j, 1);
+				 				    		break;
+				 				    	}
+				 				    }
+			 				    }
+			 				    
+							}
+						});
+
+						$('.multiselect').multiSelect('deselect_all');
+					});
+				} else {
+					$.ajax({
+						url : ctxUrl + '/siteColumnController/getSiteColumn.do?&t=' + Math.random(),
+						type : 'POST',
+						dataType : 'json',
+						data : {
+							siteId : siteid
+						}, 
+						cache : false,
+						success : function (data){
+							if (!siteColumns) {
+								siteColumns = {};
+							}
+							siteColumns[siteid] = data;
+
+							getSubColumns(data);
+						},
+						error : function (e){
+							console.log && console.log(e);
+						}
+					});
 				}
 			});
 
-			$('.multiselect[name="siteColumnArray"]').multiSelect({
-				keepOrder : true,
-				selectableOptgroup : true,
-				afterSelect : function (value){
-					var $select = $('.multiselect[name="siteColumnArray"]');
-					var $optgroup = $select.find('option[value="'+ value +'"]').closest('optgroup');
-					var siteid = $optgroup.attr('data-siteid');
-
-    				if (!multiSiteColumns) multiSiteColumns = {};
-    				if (!multiSiteColumns[siteid]) multiSiteColumns[siteid] = [];
-    				
-    				multiSiteColumns[siteid].push(value);
-				},
-				afterDeselect : function (value){
-					var $select = $('.multiselect[name="siteColumnArray"]');
-					var $optgroup = $select.find('option[value="'+ value +'"]').closest('optgroup');
-					var siteid = $optgroup.attr('data-siteid');
-					var columns = multiSiteColumns[siteid];
- 				    console.log(columns);
-
- 				    if (columns) {
- 				    	for (var j = columns.length - 1; j >= 0; j-- ) {
-	 				    	if (columns[j] === value) {
-	 				    		columns.splice(j, 1);
-	 				    		break;
-	 				    	}
-	 				    }
- 				    }
- 				    
-				}
-			});
-
-			$('.multiselect').multiSelect('deselect_all');
+			
 
 		},
 		buttonFn: {
@@ -6729,8 +6798,12 @@ var readyFNStrategies = {
 	},
 	'nav-auto' : function (elemId, self, targetIndex){
 		var elem = self ? self : $('#' + elemId);
+
 		fnOK = function (){
 			var ftlType = ftlHandler.fetchType(elem);
+			multiSiteIds.sort(function (a, b){
+				return a.order - b.order;
+			});
 			var ftlJson = {
 				type: ftlType,
 				sites: multiSiteIds,
@@ -6760,7 +6833,7 @@ var readyFNStrategies = {
 			};
 
 			elemData = {
-				'type': 'nav-auto',
+				'type': ftlType,
 				'data': {
 					'widget': widgetConfig,
 					'extra': extraConfig
@@ -6769,8 +6842,6 @@ var readyFNStrategies = {
 			widgetCachedData[elemId] = elemData;
 			writeCache(elem, elemData);
 
-			multiSiteIds = {};
-			multiSiteColumns = {};
 
 			var ftlDom = ftlTransformer(ftlJson);
 			var contentDom = contentTransformer(ftlJson);
@@ -6806,7 +6877,7 @@ function constructNavStructure (siteNames, columnNames) {
 			
 			for (var columnName in columnNames) {
 				if (columnName && columnNames[columnName] == true) {
-					console.log(columnName + ':' + cols[j]['siteColumnName']);
+					
 					if (columnName === cols[j]['siteColumnName']) {
 						if (!ret[siteid]['columns']){
 							ret[siteid]['columns'] = [];
@@ -6857,7 +6928,7 @@ var
 		$obj.find('[desc="contentShow"]').replaceWith(content);
 		$obj.find('*[operable]').smartMenu(menuData);
 
-		console.log(content);
+		
 		var moreUrl = getMoreUrl(ftl);
 		var columnName = getColumnName(ftl);
 		$obj.find('[desc="title"]').html(columnName);
@@ -7055,7 +7126,9 @@ var
 		'cont-tpl1': defaultContTplDomUpdateFn,
 		'cont-tpl2': defaultContTplDomUpdateFn,
 		'cont-tpl3': defaultContTplDomUpdateFn,
-		'nav-auto': defaultNavAutoDomUpdateFn
+		'nav-auto-type2': defaultNavAutoDomUpdateFn,
+		'nav-auto-type1': defaultNavAutoDomUpdateFn,
+		'nav-auto': defaultNavAutoDomUpdateFn,
 	};
 
 /* AOP */
