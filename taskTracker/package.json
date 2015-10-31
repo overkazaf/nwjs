@@ -2,6 +2,8 @@
   "main" : "demo.html",
   "name" : "John's Task Tracker",
   "window" : {
-    "toolbar" : true
+    "toolbar" : true,
+    "width" : 900,
+    "height" : 400
   }
 }
