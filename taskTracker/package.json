@@ -3,7 +3,7 @@
   "name" : "John's Task Tracker",
   "window" : {
     "toolbar" : true,
-    "width" : 900,
-    "height" : 400
+    "width" : 1200,
+    "height" : 600
   }
 }

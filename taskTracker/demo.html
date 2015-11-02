@@ -20,6 +20,7 @@
                         <li data-ctrl-type="done"><a href="#">done</a></li>
                         <li data-ctrl-type="today"><a href="#">today</a></li>
                         <li data-ctrl-type="radio"><a href="#">radio on</a></li>
+                        <li data-ctrl-type="google"><a href="#">google</a></li>
                     </ul>
                 </div>
                 <div class="col-xs-9 col-xs-offset-1">
@@ -61,6 +62,9 @@
                     </div>
                     <div class="container navi-container" data-container="radio">
                         <iframe frameborder="0" marginheight="0" marginwidth="0" scrolling="yes" id="appFrame" src=""></iframe>
+                    </div>
+                    <div class="container navi-container" data-container="google">
+                        <iframe frameborder="0" marginheight="0" marginwidth="0" scrolling="yes" id="googleFrame" src=""></iframe>
                     </div>
                 </div>
             </div>
@@ -121,9 +125,23 @@ var navigateStrategies = {
     'today' : function (){
         showDashboard('list');
     },
+    'google' : function () {
+        showDashboard('google');
+        var $frame = $('#googleFrame');
+        if ($frame.attr('src')) {
+            var frameWindow = $frame.get(0).contentWindow;
+            // refresh this window
+            frameWindow.location.href = frameWindow.location.href;
+        } else {
+            $frame.css({
+                width : '100%',
+                height : 500
+            }).attr('src', 'http://www.google.com?t=' + Math.random());
+        }
+    },
     'radio' : function (){
         
-        showDashboard('radio')
+        showDashboard('radio');
 
         var $frame = $('#appFrame');
         if ($frame.attr('src')) {
@@ -133,8 +151,8 @@ var navigateStrategies = {
         } else {
             $frame.css({
                 width : '100%',
-                height : 400
-            }).attr('src', 'http://www.xiami.com/radio?spam=' + Math.random());
+                height : 500
+            }).attr('src','http://www.xiami.com/radio?spam=a1z1s.6843761.226669510.5.NPqNPp');
         }
     }
 };
