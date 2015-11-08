@@ -17,8 +17,20 @@ if (args.length !== 2) {
 		}
 		doCompress(src, dest);
 	} else {
+		if (isDir(src)) {
+			fs.readdir(src, function (err, data) {
+				if (err) {
+					throw err;
+				}
 
+				console.log(data);
+			});
+		}
 	}
+}
+
+function isDir(filename) {
+	
 }
 
 function isCSSFile (filename) {
