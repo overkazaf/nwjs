@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link type="text/css" rel=stylesheet href="../lib/codemirror.css">
+    <link type="text/css" rel=stylesheet href="../doc/docs.css">
+    <script type="text/javascript" src="../lib/codemirror.js"></script>
+    <script type="text/javascript" src="../mode/xml/xml.js"></script>
+    <script type="text/javascript" src="../mode/javascript/javascript.js"></script>
+    <script type="text/javascript" src="../mode/css/css.js"></script>
+    <script type="text/javascript" src="../mode/htmlmixed/htmlmixed.js"></script>
+    <script type="text/javascript" src="../addon/edit/matchbrackets.js"></script>
+    <script type="text/javascript" src="../lib/jquery-1.11.1.min.js"></script>
+    <style>
+		#test {
+			position: absolute;
+			top : 300px;
+		}
+    </style>
+</head>
+
+<body>
+    <pre id="code" style="display: none;">
+		<div class="abc" true style="width:200px;padding:10px;border:1px solid #ccc;">
+			<h2 class="title">title</h2>
+			<p>
+				contents
+			</p>
+
+			<img src="#" alt="bbbbbbbb" class="thumbnail" />
+			<a href="" target="_blank" title="more"> more +</a>
+
+		</div>
+	</pre>
+    <textarea id="test">
+    </textarea>
+    <button id="btn" style="width:120px;height:32px;line-height: 32px;background:#09f;color:#fff;text-align: center;">
+        click me
+    </button>
+</body>
+<script type="text/javascript">
+window.onload = function() {
+    var
+        code = document.getElementById('code'),
+        test = document.getElementById('test'),
+        oBtn = document.getElementById('btn'),
+        cmEditor;
+
+    test.innerHTML = code.innerHTML;
+
+    Function.prototype.before = function (beforefn) {
+		var __self = this;
+		return function (){
+			beforefn.apply(__self, arguments);
+			var ret = __self.apply(__self, arguments);
+			return ret;
+		};
+	};
+
+	Function.prototype.after = function(afterfn) {
+		var __self = this;
+		return function() {
+			var ret = __self.apply(__self, arguments)
+			afterfn.apply(__self, arguments);
+			return ret;
+		};
+	};
+
+
+    setTimeout(function() {
+        cmEditor = CodeMirror.fromTextArea(
+            document.getElementById("test"), {
+                lineNumbers: true,
+                mode: "text/html",
+                matchBrackets: true,
+                lineWrapping: true,
+                extraKeys: {
+                    "Ctrl-Q": function(cm) {
+                        cm.foldCode(cm.getCursor());
+                    }
+                },
+                foldGutter: true
+            }
+        );
+
+        var fnTextElHovered = {
+        	_add : function (ev) {
+
+        	},
+        	_replace : function (ev) {
+	        	var thisVal = $(ev.target).text();
+	        	var line = cmEditor.lineAtHeight(ev.pageY);
+	        	if (confirm('wanna replace?')) {
+	    			var val = prompt('aaa', 'bbb');
+	    			replaceFn['txt'](val, thisVal, {
+	    				line : line
+	    			}, {
+	    				line : line+1
+	    			});
+	    		}
+	        },
+	        _delete : function (ev) {
+
+	        }
+        };
+
+        var fnAttrElHovered = {
+        	_delete : function (ev) {},
+        	_replace : function (ev) {
+        		var $this = $(ev.target);
+        		var attrLength = $this.text().length;
+	        	var $valEl = $this.next('.cm-string');
+	        	if (confirm('wanna replace attribute?')) {
+	        		var val = prompt('targetValue', $valEl.text());
+	        		val = HTMLEscape(val);
+	        		while (val.charAt(0) == '"') {
+	        			val = val.substring(1);
+	        		}
+
+	        		while (val.charAt(val.length-1) == '"') {
+	        			val = val.substring(0, val.length-1);
+	        		}
+	        		var thisVal = $valEl.text();
+	        		var coords = cmEditor.coordsChar({
+	        			left : ev.pageX,
+	        			top : ev.pageY
+	        		});
+	        		var line = cmEditor.lineAtHeight(ev.pageY);
+	        		var target = coords['ch'];
+	        		var tarCoords;
+		        	var valStart;
+	        		cmEditor.focus();
+	        		cmEditor.setCursor({
+	        			line : line,
+	        			ch : target
+	        		});
+	        		cmEditor.execCommand('goWordRight');
+	        		if (thisVal.length > 3) {
+	        			cmEditor.execCommand('goWordRight');
+	        			tarCoords = cmEditor.getCursor();
+		        		valStart = tarCoords['ch'];
+		        		var len = thisVal.length-1;
+		        		while (--len >0) {
+		        			cmEditor.execCommand('delCharBefore');
+		        		}
+
+		        		cmEditor.replaceSelection(val,{
+		        			line : tarCoords['line']
+		        		},{
+		        			line : tarCoords['line']
+		        		});
+	        		} else {
+	        			if (thisVal.length == 2) {
+	        				cmEditor.execCommand('goCharRight');
+	        				cmEditor.execCommand('goCharRight');
+	        				cmEditor.replaceSelection(val,{
+			        			line : tarCoords['line'],
+			        			line : tarCoords['ch']
+			        		});
+	        			}
+	        			
+	        		}
+
+	        		
+
+	        		test.innerText = cmEditor.getValue();
+	        		cmEditor.save();
+	        	}
+        	}
+        };
+
+
+        function addHighLight(ev){
+        	$(ev.target).css({
+    			background : '#ff0',
+    			'font-weight' : 'bold'
+    		});
+        }
+
+        function removeHighLight(ev){
+        	$(ev.target).css({
+    			background : '#fff',
+    			'font-weight' : 'normal'
+    		});
+        }
+
+
+        $('.CodeMirror').on('mouseover', '.cm-trueway', function (ev){
+        	// 可插入文本元素的处理
+        	fnTextElHovered['_replace']
+        		.before(addHighLight)
+        		.after(removeHighLight)
+        		.call(this, ev);
+        });
+
+        var attrHandleArray = "href,title,src,alt".split(',');
+
+        function indexOf (arr, el) {
+        	for (var i = 0, cur; cur = arr[i]; ++i) {
+        		if (cur == el) {
+        			return i;
+        		}
+        	}
+        	return -1;
+        }
+    	$('.CodeMirror').on('mouseover', '.cm-attribute', function (ev){
+    		// 属性值处理
+    		var attr = $(ev.target).text();
+    		if (indexOf(attrHandleArray, attr) > -1) {
+    			fnAttrElHovered['_replace']
+	        		.before(addHighLight)
+	        		.after(removeHighLight)
+	        		.call(this, ev);
+
+	        	test.innerText = cmEditor.getValue();
+        		cmEditor.save();
+    		}
+    		
+    	});
+
+
+        cmEditor.on('change', function (){
+        	test.innerText = cmEditor.getValue();
+        	cmEditor.save();
+        });
+        
+    }, 1)
+
+    oBtn.onclick = function() {
+        if (cmEditor) {
+            cmEditor.focus();
+            alert(test.innerText);
+        }
+    };
+
+    function HTMLEscape (str) {
+    	return str.replace(/</gi, '[[').replace(/>/gi, ']]');
+    }
+
+
+    var replaceFn = {
+    	'txt' : function (val, originVal, posStart, posEnd){
+    		doReplace('trueway', val, originVal, posStart, posEnd);
+    	},
+    	'attr' : function (val, originVal, posStart, posEnd){
+    		doReplace('string', val, originVal, posStart, posEnd);
+    	}
+    };
+    function doReplace (givenType, val, originVal, posStart, posEnd) {
+    	var 
+    		val = val || 'test',
+    		s = posStart['line'] || 0,
+    		e = posEnd['line'] || cmEditor.lineCount()-1;
+    	for (var i = s; i <= e; i++) {
+    		var tokens = cmEditor.getLineTokens(i);
+            tokens.forEach(function (token, j){
+            	if (token.type == givenType) {
+            		var start = posStart['ch'] || token.start,
+            			end = posEnd['ch'] || token.end;
+            		cmEditor.replaceRange(HTMLEscape(val),{
+            			line : i,
+            			ch : start
+            		},{
+            			line : i,
+            			ch : end
+            		}, originVal || null);
+            	}
+            });
+    	}
+    }
+}
+</script>
+
+</html>
